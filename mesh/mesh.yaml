@@ -16,12 +16,12 @@ descriptors:
   openai-rag-sink:
     type: edge
     volumes:
-      repository-volume:
+      pgdata:
         size: 20Gi
         persistent: true
     containers:
       sink:
-        image: ghcr.io/streamx-com/streamx-blueprints/openai-rag-sink:3.0.16-native
+        image: ghcr.io/streamx-com/streamx-blueprints/openai-rag-sink:latest-jvm
         incoming:
           resources:
             initState: delta
@@ -29,15 +29,11 @@ descriptors:
           - 8083:8080
       postgres:
         image: pgvector/pgvector:pg17
-            environment:
-              POSTGRES_DB:       ragdb
-              POSTGRES_USER:     ${DB_USERNAME:-raguser}
-              POSTGRES_PASSWORD: ${DB_PASSWORD:-ragpass}
-            ports:
-              - "5432:5432"
-            volumes:
-              - pgdata:/var/lib/postgresql/data
-              - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+        servicePorts:
+          - 5432:5432
+        volumes:
+          - pgdata:/var/lib/postgresql/data
+
 networking:
   httpRoutes:
     ingestion-route:
@@ -57,7 +53,7 @@ networking:
                 value: /
           backendRefs:
             - name: edge/openai-rag-sink
-              port: 8084
+              port: 8083
 
 sources:
   cli:
@@ -89,7 +85,7 @@ processing:
             ref: outbox.data
 
 edge:
-  blueprint-openai-rag-sink:
+  openai-rag-sink:
     descriptor: openai-rag-sink
     containers:
       sink:
@@ -99,8 +95,12 @@ edge:
         environment:
           QUARKUS_LOG_LEVEL: TRACE
           QUARKUS_LOG_MIN_LEVEL: TRACE
-
-      webserver:
+      postgres:
+        environment:
+          POSTGRES_DB:       ragdb
+          POSTGRES_USER:     raguser
+          POSTGRES_PASSWORD: ragpass
         volumesFrom:
           configs:
-            - nginx_conf/default.conf:/etc/nginx/conf.d/default.conf
+            - postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
