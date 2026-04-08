@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.streamx.blueprints</groupId>
-  <artifactId>blueprints-project</artifactId>
+  <artifactId>streamx-rag-service</artifactId>
   <version>3.0.17-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>StreamX Blueprints : Project</name>
@@ -65,18 +67,18 @@
     <quarkus-wiremock-test.version>1.5.2</quarkus-wiremock-test.version>
   </properties>
 
-<repositories>
+  <repositories>
     <repository>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <id>streamx-maven-public-releases</id>
-        <url>https://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>streamx-maven-public-releases</id>
+      <url>https://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases</url>
     </repository>
-</repositories>
+  </repositories>
 
   <dependencyManagement>
     <dependencies>
