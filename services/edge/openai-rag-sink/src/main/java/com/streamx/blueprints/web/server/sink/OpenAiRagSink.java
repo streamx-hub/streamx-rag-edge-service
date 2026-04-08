@@ -4,9 +4,11 @@ import static com.streamx.blueprints.cloudevents.utils.CloudEventUtils.isPublish
 import static com.streamx.blueprints.cloudevents.utils.CloudEventUtils.isUnpublishingType;
 
 import com.streamx.blueprints.cloudevents.utils.CloudEventUtils;
+import com.streamx.blueprints.data.Resource;
 import com.streamx.blueprints.web.server.Channels;
 import com.streamx.blueprints.web.server.Configuration;
 import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -15,10 +17,12 @@ import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.filter.MetadataFilterBuilder;
 import io.cloudevents.CloudEvent;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
@@ -55,36 +59,45 @@ public class OpenAiRagSink {
   @Incoming(Channels.RESOURCES)
   public Uni<Void> consume(CloudEvent event) {
     String subject = CloudEventUtils.getSubject(event);
-    Document document;
+    Resource resource;
     try {
-      document = CloudEventUtils.getDataSkippingUnknownProperties(event, Document.class);
+      resource = CloudEventUtils.getDataSkippingUnknownProperties(event, Resource.class);
     } catch (IllegalStateException e) {
       log.warnf(e, "Unsupported event: subject %s, type %s", subject, event.getType());
       return Uni.createFrom().voidItem();
     }
-    return process(document, subject, event.getType(),
+    return process(resource, subject, event.getType(),
         Objects.requireNonNull(event.getTime()).toInstant().toEpochMilli());
   }
 
-  private Uni<Void> process(Document document, String subject, String type, long eventTime) {
+  private <T extends Resource> Uni<Void> process(T resource, String subject,
+      String type, long eventTime) {
     boolean isHtmlResource = htmlResourceTypes.contains(type);
     String path = getPathFrom(subject, isHtmlResource);
     log.tracef("Storing %s resource: subject %s, type %s, event time %s under path %s",
         (isHtmlResource ? "HTML" : "non-HTML"), subject, type, eventTime, path);
-    return updateStorage(document, path, type);
+    return updateStorage(resource, path, type);
   }
 
-  private Uni<Void> updateStorage(Document document, String path, String type) {
+  private <T extends Resource> Uni<Void> updateStorage(T resource, String path, String type) {
     if (isPublishingType(type)) {
-      EmbeddingStoreIngestor ingestor = buildIngestor();
-      ingestor.ingest(document);
-      log.tracef("File updated: %s", path);
+      return ingest(resource, path);
     }
     if (isUnpublishingType(type)) {
       removeByUrl(path);
-      log.tracef("File deleted: %s", path);
+      log.tracef("Resource deleted: %s", path);
     }
     return Uni.createFrom().voidItem();
+  }
+
+  public Uni<Void> ingest(Resource resource, String path) {
+    log.tracef("Updating resource: %s", path);
+    EmbeddingStoreIngestor ingestor = buildIngestor();
+    return Uni.createFrom().item(() -> {
+      ingestor.ingest(Document.from(resource.getContentAsString(),
+          new Metadata(Map.of("type", resource.getType(), META_SOURCE_URL, path))));
+      return null;
+    }).runSubscriptionOn(Infrastructure.getDefaultExecutor()).replaceWithVoid();
   }
 
   private void removeByUrl(String url) {
