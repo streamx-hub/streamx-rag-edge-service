@@ -54,6 +54,18 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- Datasource for pgvector -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
+    </dependency>
+
+    <!-- Hibernate ORM + Panache for chat profile management -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm-panache</artifactId>
+    </dependency>
+
     <!-- Test dependencies -->
     <dependency>
       <groupId>io.smallrye.reactive</groupId>
