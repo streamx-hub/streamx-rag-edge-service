@@ -44,3 +44,9 @@ example-mesh/secrets/*
 # ignore edge services repositories
 example-mesh/repository/**
 repository/**
+
+# Ignore auth scripts
+/mesh/secrets/generated/
+/target
+/repository
+*/repository
