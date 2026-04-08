@@ -16,7 +16,7 @@ descriptors:
   openai-rag-sink:
     type: edge
     volumes:
-      repository-volume:
+      pgdata:
         size: 20Gi
         persistent: true
     containers:
@@ -27,10 +27,13 @@ descriptors:
             initState: delta
         servicePorts:
           - 8083:8080
+      postgres:
+        image: pgvector/pgvector:pg17
+        servicePorts:
+          - 5432:5432
         volumes:
-          - repository-volume:/srv/www
-        environment:
-          STREAMX_BLUEPRINTS_WEB_SERVER_SINK_STORAGE_ROOT_DIRECTORY: /srv/www
+          - pgdata:/var/lib/postgresql/data
+
 networking:
   httpRoutes:
     ingestion-route:
@@ -42,6 +45,15 @@ networking:
           backendRefs:
             - name: ingestion/rest-ingestion
               port: 8080
+    openai-rag-route:
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: edge/openai-rag-sink
+              port: 8083
 
 sources:
   cli:
@@ -83,3 +95,12 @@ edge:
         environment:
           QUARKUS_LOG_LEVEL: TRACE
           QUARKUS_LOG_MIN_LEVEL: TRACE
+      postgres:
+        environment:
+          POSTGRES_DB:       ragdb
+          POSTGRES_USER:     raguser
+          POSTGRES_PASSWORD: ragpass
+        volumesFrom:
+          configs:
+            - postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
