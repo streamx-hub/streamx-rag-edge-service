@@ -94,7 +94,9 @@ edge:
           QUARKUS_LOG_LEVEL: TRACE
           QUARKUS_LOG_MIN_LEVEL: TRACE
           STREAMX_POSTGRES_URL: jdbc:postgresql://sx-${STREAMX_SERVICE_ID}.postgres:5432/ragdb
-          STREAMX_OPENAI_API_KEY:
+        environmentFrom:
+          secrets:
+            - ".env"
       postgres:
         environment:
           POSTGRES_DB:       ragdb

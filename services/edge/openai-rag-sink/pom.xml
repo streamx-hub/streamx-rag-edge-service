@@ -40,6 +40,10 @@
       <artifactId>quarkus-langchain4j-pgvector</artifactId>
       <version>${quarkus-langchain4j.version}</version>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-jackson</artifactId>
+    </dependency>
 
     <!-- Test dependencies -->
     <dependency>
