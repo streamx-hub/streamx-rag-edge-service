@@ -25,6 +25,8 @@ import java.time.Instant;
 @Table(name = "chat_profiles")
 public class ChatProfile extends PanacheEntityBase {
 
+  protected static final int MAX_RESULTS = 10;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long id;
@@ -53,7 +55,7 @@ public class ChatProfile extends PanacheEntityBase {
    * faster and cheaper. Recommended range: 5–20. Default: 10.
    */
   @Column(name = "max_results")
-  public int maxResults = 10;
+  public int maxResults = MAX_RESULTS;
 
   /**
    * Minimum cosine-similarity score for a chunk to be included in context. Range 0–1. Lower = more

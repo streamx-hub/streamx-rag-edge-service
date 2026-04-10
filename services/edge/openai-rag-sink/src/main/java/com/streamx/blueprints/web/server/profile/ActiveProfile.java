@@ -1,5 +1,7 @@
 package com.streamx.blueprints.web.server.profile;
 
+import static com.streamx.blueprints.web.server.profile.ChatProfile.MAX_RESULTS;
+
 import jakarta.enterprise.context.RequestScoped;
 
 /**
@@ -7,8 +9,8 @@ import jakarta.enterprise.context.RequestScoped;
  *
  * <p>{@link com.streamx.blueprints.web.server.chat.ChatResource} resolves the profile from the
  * database once and stores it here. The
- * {@link com.streamx.blueprints.web.server.retrieval.RagRetrievalAugmentorSupplier} then reads {@code maxResults} and
- * {@code minScore} from this bean without an additional DB lookup.
+ * {@link com.streamx.blueprints.web.server.retrieval.RagRetrievalAugmentorSupplier} then reads
+ * {@code maxResults} and {@code minScore} from this bean without an additional DB lookup.
  *
  * <p>CDI automatically creates one instance per HTTP request and tears it down
  * when the request completes. An {@code @ApplicationScoped} bean that injects this class receives a
@@ -31,7 +33,7 @@ public class ActiveProfile {
    * Convenience: retrieval max results, falls back to 10 if not yet set.
    */
   public int maxResults() {
-    return profile != null ? profile.maxResults : 10;
+    return profile != null ? profile.maxResults : MAX_RESULTS;
   }
 
   /**

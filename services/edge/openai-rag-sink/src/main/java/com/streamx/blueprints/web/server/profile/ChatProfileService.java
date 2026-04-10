@@ -1,5 +1,7 @@
 package com.streamx.blueprints.web.server.profile;
 
+import static com.streamx.blueprints.web.server.profile.ChatProfile.MAX_RESULTS;
+
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -47,7 +49,7 @@ public class ChatProfileService {
         "Default — Product & Content Assistant",
         DEFAULT_SYSTEM_PROMPT
     );
-    p.maxResults = 10;
+    p.maxResults = MAX_RESULTS;
     p.minScore = 0.50;
     p.persist();
     LOG.info("Seeded default chat profile");
@@ -65,7 +67,7 @@ public class ChatProfileService {
    *                               (should never happen after seed)
    */
   @Transactional(TxType.SUPPORTS)
-  public ChatProfile resolve(String profileName) {
+  public ChatProfile resolveOrDefault(String profileName) {
     String name = (profileName == null || profileName.isBlank())
         ? DEFAULT_PROFILE_NAME
         : profileName.trim();
