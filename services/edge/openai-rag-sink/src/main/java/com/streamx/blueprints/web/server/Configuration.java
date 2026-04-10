@@ -12,6 +12,14 @@ public interface Configuration {
 
   Optional<Set<String>> htmlResourceTypes();
 
-  @WithDefault("/tmp/streamx")
-  String storageRootDirectory();
+  IngestionConfig ingestion();
+
+  interface IngestionConfig {
+
+    @WithDefault("500")
+    int chunkSize();
+
+    @WithDefault("50")
+    int chunkOverlap();
+  }
 }

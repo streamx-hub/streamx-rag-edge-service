@@ -38,11 +38,11 @@ build/
 /.idea/
 
 # ignore secrets
-example-mesh/secrets/*
-!example-mesh/secrets/.gitkeep
+mesh/secrets/*
+!mesh/secrets/.gitkeep
 
 # ignore edge services repositories
-example-mesh/repository/**
+mesh/repository/**
 repository/**
 
 # Ignore auth scripts
