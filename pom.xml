@@ -46,22 +46,28 @@
     <!-- Quarkus -->
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.31.1</quarkus.platform.version> <!-- TODO migrate to LTS, 3.33 is expected to be released in March 2026 -->
+    <quarkus.platform.version>3.31.1
+    </quarkus.platform.version> <!-- TODO migrate to LTS, 3.33 is expected to be released in March 2026 -->
     <quarkus-reactive-messaging-http.version>2.5.0-lts</quarkus-reactive-messaging-http.version>
 
     <!--  Images tags  -->
     <streamx.container-image.package.type.jvm>jvm</streamx.container-image.package.type.jvm>
-    <streamx.container-image.package.type.native>native</streamx.container-image.package.type.native>
-    <streamx.container-image.latest-tag>latest-${quarkus.container-image.package.type}</streamx.container-image.latest-tag>
+    <streamx.container-image.package.type.native>native
+    </streamx.container-image.package.type.native>
+    <streamx.container-image.latest-tag>latest-${quarkus.container-image.package.type}
+    </streamx.container-image.latest-tag>
 
     <!--  Docker  -->
     <quarkus.container-image.build>true</quarkus.container-image.build>
     <quarkus.container-image.registry>ghcr.io</quarkus.container-image.registry>
     <quarkus.container-image.group>streamx-hub/streamx-exprimental</quarkus.container-image.group>
     <quarkus.container-image.name>${project.artifactId}</quarkus.container-image.name>
-    <quarkus.container-image.package.type>${streamx.container-image.package.type.jvm}</quarkus.container-image.package.type>
-    <quarkus.container-image.tag>${project.version}-${quarkus.container-image.package.type}</quarkus.container-image.tag>
-    <quarkus.container-image.additional-tags>${streamx.container-image.latest-tag}</quarkus.container-image.additional-tags>
+    <quarkus.container-image.package.type>${streamx.container-image.package.type.jvm}
+    </quarkus.container-image.package.type>
+    <quarkus.container-image.tag>${project.version}-${quarkus.container-image.package.type}
+    </quarkus.container-image.tag>
+    <quarkus.container-image.additional-tags>${streamx.container-image.latest-tag}
+    </quarkus.container-image.additional-tags>
 
     <!-- Test dependencies -->
     <assertj-core.version>4.0.0-M1</assertj-core.version>
@@ -364,6 +370,13 @@
         </executions>
       </plugin>
       <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-release-plugin</artifactId>
         <version>${maven-release-plugin.version}</version>
         <configuration>
@@ -384,4 +397,25 @@
       </extension>
     </extensions>
   </build>
+
+  <profiles>
+    <profile>
+      <id>native</id>
+      <activation>
+        <property>
+          <name>native</name>
+        </property>
+      </activation>
+      <properties>
+        <skipITs>false</skipITs>
+        <quarkus.package.type>native</quarkus.package.type>
+      </properties>
+    </profile>
+    <profile>
+      <id>container-image-multiplatform</id>
+      <properties>
+        <quarkus.docker.buildx.platform>linux/amd64,linux/arm64</quarkus.docker.buildx.platform>
+      </properties>
+    </profile>
+  </profiles>
 </project>
