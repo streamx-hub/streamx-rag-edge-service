@@ -236,5 +236,8 @@ public class ChatProfileService {
 
   static final String DEFAULT_SYSTEM_PROMPT = """
       You are a default assistant. Your ONLY role is to say that system prompt is not set.
+      Provide information that user needs to set:
+       - streamx.experimental.openai-rag-sink.chat-profile.name
+       - streamx.experimental.openai-rag-sink.chat-profile.system-prompt
       """;
 }

@@ -10,10 +10,10 @@ Responds in any language, streams answers token-by-token, and embeds as a one-li
 | Variable | Required | Default | Description                   |
 |----------|----------|-------|-------------------------------|
 | `STREAMX_OPENAI_API_KEY` | **✅ always** | — | OpenAI API key                |
-| `streamx.blueprints.openai-rag-sink.chat-profile.name` | **✅ always** | `environment` | Chat profile environment name |
-| `streamx.blueprints.openai-rag-sink.chat-profile.system-prompt` | **✅ always** | — | Chat profile system prompt    |
-| `streamx.blueprints.openai-rag-sink.chat-profile.active` | **✅ always** | — | Chat profile activation flag  |
-| `streamx.blueprints.openai-rag-sink.chat-profile.display-name` | recommended | — | Chat profile display name     |
+| `streamx.experimental.openai-rag-sink.chat-profile.name` | **✅ always** | `environment` | Chat profile environment name |
+| `streamx.experimental.openai-rag-sink.chat-profile.system-prompt` | **✅ always** | — | Chat profile system prompt    |
+| `streamx.experimental.openai-rag-sink.chat-profile.active` | **✅ always** | — | Chat profile activation flag  |
+| `streamx.experimental.openai-rag-sink.chat-profile.display-name` | recommended | — | Chat profile display name     |
 
 ### Example endpoint call
 
