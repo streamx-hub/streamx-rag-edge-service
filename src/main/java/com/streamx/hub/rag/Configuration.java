@@ -5,7 +5,7 @@ import io.smallrye.config.WithDefault;
 import java.util.Optional;
 import java.util.Set;
 
-@ConfigMapping(prefix = "streamx.experimental.openai-rag-sink")
+@ConfigMapping(prefix = "streamx.hub.openai-rag-sink")
 public interface Configuration {
 
   Optional<String> defaultNamespace();
