@@ -4,17 +4,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.streamx.blueprints</groupId>
+  <groupId>com.streamx.exprimental</groupId>
   <artifactId>streamx-rag-service</artifactId>
-  <version>3.0.17-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>StreamX Blueprints : Project</name>
-
-  <modules>
-    <module>libraries</module>
-    <module>extensions</module>
-    <module>services</module>
-  </modules>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>StreamX RAG : Project</name>
 
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
@@ -56,7 +49,7 @@
     <!--  Docker  -->
     <quarkus.container-image.build>true</quarkus.container-image.build>
     <quarkus.container-image.registry>ghcr.io</quarkus.container-image.registry>
-    <quarkus.container-image.group>streamx-com/streamx-blueprints</quarkus.container-image.group>
+    <quarkus.container-image.group>streamx-hub/streamx-exprimental</quarkus.container-image.group>
     <quarkus.container-image.name>${project.artifactId}</quarkus.container-image.name>
     <quarkus.container-image.package.type>${streamx.container-image.package.type.jvm}</quarkus.container-image.package.type>
     <quarkus.container-image.tag>${project.version}-${quarkus.container-image.package.type}</quarkus.container-image.tag>
@@ -65,6 +58,8 @@
     <!-- Test dependencies -->
     <assertj-core.version>4.0.0-M1</assertj-core.version>
     <quarkus-wiremock-test.version>1.5.2</quarkus-wiremock-test.version>
+
+    <quarkus-langchain4j.version>1.8.4</quarkus-langchain4j.version>
   </properties>
 
   <repositories>
@@ -96,31 +91,6 @@
         <groupId>com.streamx</groupId>
         <artifactId>cloudevents-serialization-json</artifactId>
         <version>${streamx.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.streamx.blueprints</groupId>
-        <artifactId>cloud-events-support</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.streamx.blueprints</groupId>
-        <artifactId>key-value-state-repository</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.streamx.blueprints</groupId>
-        <artifactId>data-model</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.streamx.blueprints</groupId>
-        <artifactId>quarkus-rocksdb-native-support-deployment</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.streamx.blueprints</groupId>
-        <artifactId>quarkus-rocksdb-native-support</artifactId>
-        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>${quarkus.platform.group-id}</groupId>
@@ -165,6 +135,66 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.streamx</groupId>
+      <artifactId>content-parser</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+
+    <!-- LangChain4j OpenAI (chat + embedding) -->
+    <dependency>
+      <groupId>io.quarkiverse.langchain4j</groupId>
+      <artifactId>quarkus-langchain4j-openai</artifactId>
+      <version>${quarkus-langchain4j.version}</version>
+    </dependency>
+
+    <!-- LangChain4j pgvector embedding store -->
+    <dependency>
+      <groupId>io.quarkiverse.langchain4j</groupId>
+      <artifactId>quarkus-langchain4j-pgvector</artifactId>
+      <version>${quarkus-langchain4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-jackson</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-opentelemetry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.streamx</groupId>
+      <artifactId>reactive-messaging-http-cloudevents</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-container-image-docker</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Datasource for pgvector -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
+    </dependency>
+
+    <!-- Hibernate ORM + Panache for chat profile management -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm-panache</artifactId>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement>
@@ -332,6 +362,10 @@
           <tagNameFormat>@{project.version}</tagNameFormat>
           <scmCommentPrefix>[no ci] [maven-release-plugin]</scmCommentPrefix>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
       </plugin>
     </plugins>
     <extensions>
