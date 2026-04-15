@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag.data;
+package com.streamx.hub.rag.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

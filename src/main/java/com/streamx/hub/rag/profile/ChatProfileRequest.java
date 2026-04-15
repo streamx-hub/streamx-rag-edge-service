@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag.profile;
+package com.streamx.hub.rag.profile;
 
 /**
  * Payload for creating or updating a chat profile.

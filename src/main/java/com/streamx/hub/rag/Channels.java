@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag;
+package com.streamx.hub.rag;
 
 public final class Channels {
 

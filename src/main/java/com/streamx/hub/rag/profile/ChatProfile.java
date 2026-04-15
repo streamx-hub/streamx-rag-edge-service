@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag.profile;
+package com.streamx.hub.rag.profile;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;

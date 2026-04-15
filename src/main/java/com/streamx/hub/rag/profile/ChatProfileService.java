@@ -1,8 +1,6 @@
-package com.streamx.experimental.rag.profile;
+package com.streamx.hub.rag.profile;
 
-import static com.streamx.experimental.rag.profile.ChatProfile.MAX_RESULTS;
-
-import com.streamx.experimental.rag.Configuration;
+import com.streamx.hub.rag.Configuration;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -55,7 +53,7 @@ public class ChatProfileService {
         "Default — Product & Content Assistant",
         DEFAULT_SYSTEM_PROMPT
     );
-    p.maxResults = MAX_RESULTS;
+    p.maxResults = ChatProfile.MAX_RESULTS;
     p.minScore = 0.50;
     p.persist();
     LOG.info("Seeded default chat profile");

@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag.retrieval;
+package com.streamx.hub.rag.retrieval;
 
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.rag.query.Query;

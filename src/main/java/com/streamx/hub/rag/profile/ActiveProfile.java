@@ -1,9 +1,7 @@
-package com.streamx.experimental.rag.profile;
+package com.streamx.hub.rag.profile;
 
-import static com.streamx.experimental.rag.profile.ChatProfile.MAX_RESULTS;
-
-import com.streamx.experimental.rag.chat.ChatResource;
-import com.streamx.experimental.rag.retrieval.RagRetrievalAugmentorSupplier;
+import com.streamx.hub.rag.chat.ChatResource;
+import com.streamx.hub.rag.retrieval.RagRetrievalAugmentorSupplier;
 import jakarta.enterprise.context.RequestScoped;
 
 /**
@@ -35,7 +33,7 @@ public class ActiveProfile {
    * Convenience: retrieval max results, falls back to 10 if not yet set.
    */
   public int maxResults() {
-    return profile != null ? profile.maxResults : MAX_RESULTS;
+    return profile != null ? profile.maxResults : ChatProfile.MAX_RESULTS;
   }
 
   /**

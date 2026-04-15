@@ -1,6 +1,6 @@
-package com.streamx.experimental.rag.chat;
+package com.streamx.hub.rag.chat;
 
-import com.streamx.experimental.rag.retrieval.RagRetrievalAugmentorSupplier;
+import com.streamx.hub.rag.retrieval.RagRetrievalAugmentorSupplier;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;

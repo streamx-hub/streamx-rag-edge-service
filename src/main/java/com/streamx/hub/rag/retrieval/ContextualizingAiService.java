@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag.retrieval;
+package com.streamx.hub.rag.retrieval;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;

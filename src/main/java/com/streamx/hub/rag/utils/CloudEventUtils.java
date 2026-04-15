@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag.utils;
+package com.streamx.hub.rag.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

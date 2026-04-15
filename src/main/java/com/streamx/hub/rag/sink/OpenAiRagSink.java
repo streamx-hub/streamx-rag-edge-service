@@ -1,12 +1,12 @@
-package com.streamx.experimental.rag.sink;
+package com.streamx.hub.rag.sink;
 
-import static com.streamx.experimental.rag.utils.CloudEventUtils.isPublishingType;
-import static com.streamx.experimental.rag.utils.CloudEventUtils.isUnpublishingType;
+import static com.streamx.hub.rag.utils.CloudEventUtils.isPublishingType;
+import static com.streamx.hub.rag.utils.CloudEventUtils.isUnpublishingType;
 
-import com.streamx.experimental.rag.Channels;
-import com.streamx.experimental.rag.Configuration;
-import com.streamx.experimental.rag.data.Resource;
-import com.streamx.experimental.rag.utils.CloudEventUtils;
+import com.streamx.hub.rag.Channels;
+import com.streamx.hub.rag.Configuration;
+import com.streamx.hub.rag.data.Resource;
+import com.streamx.hub.rag.utils.CloudEventUtils;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;

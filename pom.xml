@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.streamx.exprimental</groupId>
+  <groupId>com.streamx.hub</groupId>
   <artifactId>streamx-rag-service</artifactId>
   <version>0.0.3-SNAPSHOT</version>
   <name>StreamX RAG : Project</name>
@@ -58,7 +58,7 @@
     <!--  Docker  -->
     <quarkus.container-image.build>true</quarkus.container-image.build>
     <quarkus.container-image.registry>ghcr.io</quarkus.container-image.registry>
-    <quarkus.container-image.group>streamx-hub/streamx-exprimental</quarkus.container-image.group>
+    <quarkus.container-image.group>streamx-hub/streamx-hub</quarkus.container-image.group>
     <quarkus.container-image.name>${project.artifactId}</quarkus.container-image.name>
     <quarkus.container-image.package.type>${streamx.container-image.package.type.jvm}
     </quarkus.container-image.package.type>

@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag;
+package com.streamx.hub.rag;
 
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;

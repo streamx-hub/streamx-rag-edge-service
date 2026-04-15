@@ -1,4 +1,4 @@
-package com.streamx.experimental.rag.retrieval;
+package com.streamx.hub.rag.retrieval;
 
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;

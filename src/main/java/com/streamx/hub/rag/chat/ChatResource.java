@@ -1,8 +1,8 @@
-package com.streamx.experimental.rag.chat;
+package com.streamx.hub.rag.chat;
 
-import com.streamx.experimental.rag.profile.ActiveProfile;
-import com.streamx.experimental.rag.profile.ChatProfile;
-import com.streamx.experimental.rag.profile.ChatProfileService;
+import com.streamx.hub.rag.profile.ActiveProfile;
+import com.streamx.hub.rag.profile.ChatProfile;
+import com.streamx.hub.rag.profile.ChatProfileService;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import jakarta.inject.Inject;
