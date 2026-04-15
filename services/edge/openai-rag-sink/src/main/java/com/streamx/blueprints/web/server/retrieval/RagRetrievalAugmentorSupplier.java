@@ -28,7 +28,7 @@ public class RagRetrievalAugmentorSupplier implements Supplier<RetrievalAugmento
         .embeddingStore(embeddingStore)
         .embeddingModel(embeddingModel)
         .maxResults(10)
-        .minScore(0.50)
+        .minScore(0.65)
         .build();
 
     return DefaultRetrievalAugmentor.builder()

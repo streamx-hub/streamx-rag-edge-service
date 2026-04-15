@@ -86,10 +86,11 @@ class StreamxChat extends HTMLElement {
 
     // Auto-replace localhost with the actual page hostname so the widget
     // works transparently both on local machine and on LAN (e.g. 192.168.x.x)
-    const pageHost = window.location.hostname;
-    if (pageHost && pageHost !== 'localhost' && pageHost !== '127.0.0.1') {
-      apiUrl = apiUrl.replace(/localhost|127\.0\.0\.1/, pageHost);
-    }
+    // Needs to be commented to working in PureSight
+//    const pageHost = window.location.hostname;
+//    if (pageHost && pageHost !== 'localhost' && pageHost !== '127.0.0.1') {
+//      apiUrl = apiUrl.replace(/localhost|127\.0\.0\.1/, pageHost);
+//    }
 
     this._shadow.innerHTML = `
       <style>

@@ -2,14 +2,17 @@ package com.streamx.blueprints.web.server.profile;
 
 import static com.streamx.blueprints.web.server.profile.ChatProfile.MAX_RESULTS;
 
+import com.streamx.blueprints.web.server.Configuration;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.jboss.logging.Logger;
@@ -31,6 +34,9 @@ public class ChatProfileService {
    */
   private final Map<String, CachedEntry> cache = new ConcurrentHashMap<>();
   private static final long CACHE_TTL_MS = 60_000;
+
+  @Inject
+  Configuration config;
 
   /**
    * Creates the built-in "default" profile on first boot if it does not exist. This ensures the
@@ -68,13 +74,22 @@ public class ChatProfileService {
    */
   @Transactional(TxType.SUPPORTS)
   public ChatProfile resolveOrDefault(String profileName) {
+    Configuration.ChatProfile envChatProfile = config.chatProfile();
     String name = (profileName == null || profileName.isBlank())
-        ? DEFAULT_PROFILE_NAME
+        ? envChatProfile.name().orElse(DEFAULT_PROFILE_NAME)
         : profileName.trim();
 
     CachedEntry entry = cache.get(name);
     if (entry != null && !entry.isExpired()) {
       return entry.profile;
+    }
+
+    Optional<String> envChatProfileName = envChatProfile.name();
+    if (envChatProfileName.isPresent()) {
+      ChatProfile envProfile = ChatProfile.create(envChatProfileName.get(),
+          envChatProfile.displayName(), envChatProfile.systemPrompt());
+      cache.put(name, new CachedEntry(envProfile));
+      return envProfile;
     }
 
     ChatProfile profile = ChatProfile.findByName(name);
@@ -235,11 +250,30 @@ public class ChatProfileService {
       
       Answering rules:
       - If the context contains relevant products, list them with: name, SKU, price, key specs
+      - Link: generate a relative URL only if a product slug is explicitly provided in the context.
+        - Format: /products/{slug}.html
+        - links
       - If multiple products match, present a comparison table
       - Rank by price when the user asks for cheapest / najtańsze / günstigste etc.
       - If the context is empty or truly irrelevant, say so in the user's language and suggest
         rephrasing with category, brand or budget
+      - IF there are no search results but if there are similar products, offer the most relevant
+        For example: there is no green sofa, but there is black sofa, offer black sofa
       - NEVER invent SKUs, prices or specs not present in the context
+      - If the user provides a SKU, ID, or exact identifier:
+        - Treat it as a precise lookup request
+        - ALWAYS prioritize exact matches from the catalog (or tools) over semantic similarity
+        - If the SKU exists in the provided context → return its full details
+        - If the SKU is NOT in the current context:
+          - DO NOT say the product does not exist
+          - Instead say you could not find it in the retrieved data and suggest checking
+            the catalog or refining the query
+      - If the SKU was mentioned earlier in the conversation, treat it as a valid reference,
+        but still rely only on confirmed data
       - Be concise: prefer bullet lists and tables over long paragraphs
+      
+      Goal:
+      - Help the user reliably find and compare products with high accuracy, consistency,
+        and clarity.
       """;
 }

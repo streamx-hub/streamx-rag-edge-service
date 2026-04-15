@@ -14,6 +14,8 @@ public interface Configuration {
 
   IngestionConfig ingestion();
 
+  ChatProfile chatProfile();
+
   interface IngestionConfig {
 
     @WithDefault("500")
@@ -21,5 +23,16 @@ public interface Configuration {
 
     @WithDefault("50")
     int chunkOverlap();
+  }
+
+  interface ChatProfile {
+
+    Optional<String> name();
+
+    String displayName();
+
+    boolean active();
+
+    String systemPrompt();
   }
 }
